@@ -177,10 +177,7 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $EXEC_TEMPLATES_SRC_CONTAINER_DIR = "C:\Users\ContainerAdministrator\Shippable\execTemplates"
-  $EXEC_TEMPLATES_SRC_HOST_DIR = "C:\Users\Administrator\Desktop\execTemplates"
-
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${EXEC_TEMPLATES_SRC_HOST_DIR}:${EXEC_TEMPLATES_SRC_CONTAINER_DIR} "
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
 }
 
 Function setup_envs() {
