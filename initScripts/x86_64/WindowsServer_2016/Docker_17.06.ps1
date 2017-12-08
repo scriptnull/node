@@ -177,10 +177,10 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $REQPROC_SRC_CONTAINER_DIR = "C:\Users\ContainerAdministrator\Shippable\temp\reqProc"
-  $REQPROC_SRC_HOST_DIR = "C:\Users\Administrator\Desktop\reqProc"
+  $EXEC_TEMPLATES_SRC_CONTAINER_DIR = "C:\Users\ContainerAdministrator\Shippable\execTemplates"
+  $EXEC_TEMPLATES_SRC_HOST_DIR = "C:\Users\Administrator\Desktop\execTemplates"
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${REQPROC_SRC_HOST_DIR}:${REQPROC_SRC_CONTAINER_DIR} "
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${EXEC_TEMPLATES_SRC_HOST_DIR}:${EXEC_TEMPLATES_SRC_CONTAINER_DIR} "
 }
 
 Function setup_envs() {
@@ -242,6 +242,10 @@ Function boot_reqProc() {
   $reset_windows = "docker exec $REQPROC_CONTAINER_NAME powershell git reset scriptnull/windows --hard"
   Write-Output "Resetting windows branch"
   iex "$reset_windows"
+
+  $restart_reqproc = "docker restart $REQPROC_CONTAINER_NAME"
+  Write-Output "Restarting ReqProc Container"
+  iex "$restart_reqproc"
 }
 
 Function boot_reqKick() {
