@@ -180,7 +180,7 @@ Function setup_mounts() {
   $REQPROC_SRC_CONTAINER_DIR = "C:\Users\ContainerAdministrator\Shippable\reqProc"
   $REQPROC_SRC_HOST_DIR = "C:\Users\Administrator\Desktop\reqProc"
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${REQPROC_SRC_HOST_DIR}:${REQPROC_SRC_CONTAINER_DIR}"
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
 }
 
 Function setup_envs() {
