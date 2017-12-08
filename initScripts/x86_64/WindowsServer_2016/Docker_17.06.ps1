@@ -102,7 +102,7 @@ Function docker_install() {
 
   Write-Output "Verifying Docker service has started"
   $dockerService = Get-Service docker
-  
+
   if ($dockerService.Status -ne "Running") {
     Start-Service docker
   }
@@ -177,7 +177,10 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
+  $REQPROC_SRC_CONTAINER_DIR = "C:\Users\ContainerAdministrator\Shippable\reqProc"
+  $REQPROC_SRC_HOST_DIR = "C:\Users\Administrator\Desktop\reqProc"
+
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${REQPROC_SRC_HOST_DIR}:${REQPROC_SRC_CONTAINER_DIR}"
 }
 
 Function setup_envs() {
