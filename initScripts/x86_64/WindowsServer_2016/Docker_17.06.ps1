@@ -18,7 +18,7 @@ $CONTAINER_REQEXEC_DIR = "$CONTAINER_BASE_DIR\reqExec"
 # TODO: change to correct path after automating the build process
 #$REQEXEC_BIN_DIR = "$BASE_DIR\reqExec\bin"
 #$REQEXEC_BIN_PATH = "$REQEXEC_BIN_DIR\$NODE_ARCHITECTURE/$NODE_OPERATING_SYSTEM/dist/main/main"
-$REQEXEC_BIN_PATH ="C:\Users\ContainerAdministrator\Shippable\reqExec\x86_64\WindowsServer_2016\dist\main"
+$REQEXEC_BIN_PATH ="C:\Users\ContainerAdministrator\Shippable\reqExec\x86_64\WindowsServer_2016\dist\main\main"
 
 $REQKICK_DIR = "$BASE_DIR\reqKick"
 $CONTAINER_REQKICK_DIR = "$CONTAINER_BASE_DIR\reqKick"
