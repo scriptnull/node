@@ -34,6 +34,7 @@ $EXEC_IMAGE = "drydock/w16reqproc:$SHIPPABLE_RELEASE_VERSION"
 # TODO: move these to reqproc image
 $IMAGE_REQEXEC_DIR = "$CONTAINER_BASE_DIR\reqExec"
 $IMAGE_EXEC_TEMPLATES_DIR = "$CONTAINER_BASE_DIR\execTemplates"
+$HOST_EXEC_TEMPLATES_DIR="C:\Users\Administrator\Desktop\execTemplates"
 
 $REQPROC_MOUNTS = ""
 $REQPROC_ENVS = ""
@@ -177,7 +178,7 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${HOST_EXEC_TEMPLATES_DIR}:${IMAGE_EXEC_TEMPLATES_DIR} "
 }
 
 Function setup_envs() {
