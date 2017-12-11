@@ -244,9 +244,13 @@ Function boot_reqProc() {
   Write-Output "Restarting ReqProc Container"
   iex "$restart_reqproc"
 
-  $exec_templates = "docker exec $REQPROC_CONTAINER_NAME powershell pushd $IMAGE_EXEC_TEMPLATES_DIR; git clone https://github.com/scriptnull/execTemplates.git; git fetch origin windows; git reset origin/windows --hard; popd"
+  $exec_templates = "docker exec $REQPROC_CONTAINER_NAME powershell git clone https://github.com/scriptnull/execTemplates.git $IMAGE_EXEC_TEMPLATES_DIR"
   Write-Output "Trying to setup execTemplates"
   iex "$exec_templates"
+
+  $exec_templates_ls = "docker exec $REQPROC_CONTAINER_NAME powershell ls $IMAGE_EXEC_TEMPLATES_DIR"
+  Write-Output "Listing files inside execTemplates"
+  iex "$exec_templates_ls"
 }
 
 Function boot_reqKick() {
