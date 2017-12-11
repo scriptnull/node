@@ -34,7 +34,6 @@ $EXEC_IMAGE = "drydock/w16reqproc:$SHIPPABLE_RELEASE_VERSION"
 # TODO: move these to reqproc image
 $IMAGE_REQEXEC_DIR = "$CONTAINER_BASE_DIR\reqExec"
 $IMAGE_EXEC_TEMPLATES_DIR = "$CONTAINER_BASE_DIR\execTemplates"
-$HOST_EXEC_TEMPLATES_DIR="C:\Users\Administrator\Desktop\execTemplates"
 
 $REQPROC_MOUNTS = ""
 $REQPROC_ENVS = ""
@@ -178,7 +177,7 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${HOST_EXEC_TEMPLATES_DIR}:${IMAGE_EXEC_TEMPLATES_DIR} "
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
 }
 
 Function setup_envs() {
@@ -244,6 +243,10 @@ Function boot_reqProc() {
   $restart_reqproc = "docker restart $REQPROC_CONTAINER_NAME"
   Write-Output "Restarting ReqProc Container"
   iex "$restart_reqproc"
+
+  $exec_templates = "docker exec $REQPROC_CONTAINER_NAME powershell pushd $IMAGE_EXEC_TEMPLATES_DIR; git clone https://github.com/scriptnull/execTemplates.git; git fetch origin windows; git reset origin/windows --hard; popd"
+  Write-Output "Trying to setup execTemplates"
+  iex "$exec_templates"
 }
 
 Function boot_reqKick() {
