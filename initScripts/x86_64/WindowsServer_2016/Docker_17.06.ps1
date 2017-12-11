@@ -28,6 +28,13 @@ $CONTAINER_BUILD_DIR = "$CONTAINER_BASE_DIR\build"
 $STATUS_DIR = "$BUILD_DIR\status"
 $SCRIPTS_DIR = "$BUILD_DIR\scripts"
 
+# TODO: this needs to be hardcoded until we have a way to specify it in the API
+$EXEC_IMAGE = "drydock/w16reqproc:$SHIPPABLE_RELEASE_VERSION"
+
+# For mounting execTemplates for dev
+$IMAGE_EXEC_TEMPLATES_DIR = "C:\Users\ContainerAdministrator\Shippable\reqProc\execTemplates"
+$HOST_EXEC_TEMPLATES_DIR="C:\Users\Administrator\Desktop\execTemplates"
+
 $REQPROC_MOUNTS = ""
 $REQPROC_ENVS = ""
 $REQPROC_OPTS = ""
@@ -173,7 +180,7 @@ Function setup_mounts() {
     mkdir -p $BUILD_DIR
   }
 
-  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} "
+  $global:REQPROC_MOUNTS= " -v ${BASE_DIR}:${CONTAINER_BASE_DIR} -v ${HOST_EXEC_TEMPLATES_DIR}:${IMAGE_EXEC_TEMPLATES_DIR} "
 }
 
 Function setup_envs() {
@@ -201,6 +208,7 @@ Function setup_envs() {
     "-e SHIPPABLE_NODE_ARCHITECTURE=$NODE_ARCHITECTURE " + `
     "-e SHIPPABLE_NODE_OPERATING_SYSTEM=$NODE_OPERATING_SYSTEM " + `
     "-e SHIPPABLE_RELEASE_VERSION=$SHIPPABLE_RELEASE_VERSION " + `
+    "-e IMAGE_EXEC_TEMPLATES_DIR='$IMAGE_EXEC_TEMPLATES_DIR' " + `
     "-e DOCKER_HOST=${DOCKER_NAT_IP}:2375"
 }
 
