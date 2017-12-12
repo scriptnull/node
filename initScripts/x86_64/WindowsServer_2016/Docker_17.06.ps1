@@ -7,7 +7,7 @@ $DOCKER_CONFIG_FILE="C:\ProgramData\Docker\config\daemon.json"
 $SHIPPABLE_RUNTIME_DIR = "$env:USERPROFILE\Shippable\Runtime"
 $BASE_UUID = New-Guid
 $BASE_DIR = "$SHIPPABLE_RUNTIME_DIR\$BASE_UUID"
-$CONTAINER_RUNTIME_DIR = "C:\Users\ContainerAdministrator\Shippable\Runtime"
+$CONTAINER_RUNTIME_DIR = "C:\Users\Administrator\Shippable\Runtime"
 $CONTAINER_BASE_DIR = "$CONTAINER_RUNTIME_DIR\$BASE_UUID"
 
 $REQPROC_DIR = "$BASE_DIR\reqProc"
