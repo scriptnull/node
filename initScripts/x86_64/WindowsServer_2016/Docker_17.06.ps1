@@ -7,7 +7,7 @@ $DOCKER_CONFIG_FILE="C:\ProgramData\Docker\config\daemon.json"
 $SHIPPABLE_RUNTIME_DIR = "$env:USERPROFILE\Shippable\Runtime"
 $BASE_UUID = New-Guid
 $BASE_DIR = "$SHIPPABLE_RUNTIME_DIR\$BASE_UUID"
-$CONTAINER_RUNTIME_DIR = "C:\Users\Administrator\Shippable\Runtime"
+$CONTAINER_RUNTIME_DIR = "$env:USERPROFILE\Shippable\Runtime"
 $CONTAINER_BASE_DIR = "$CONTAINER_RUNTIME_DIR\$BASE_UUID"
 
 $REQPROC_DIR = "$BASE_DIR\reqProc"
@@ -16,9 +16,8 @@ $CONTAINER_REQPROC_DIR = "$CONTAINER_BASE_DIR\reqProc"
 $REQEXEC_DIR = "$BASE_DIR\reqExec"
 $CONTAINER_REQEXEC_DIR = "$CONTAINER_BASE_DIR\reqExec"
 # TODO: change to correct path after automating the build process
-#$REQEXEC_BIN_DIR = "$BASE_DIR\reqExec\bin"
-#$REQEXEC_BIN_PATH = "$REQEXEC_BIN_DIR\$NODE_ARCHITECTURE/$NODE_OPERATING_SYSTEM/dist/main/main"
-$REQEXEC_BIN_PATH ="C:\Users\Administrator\Downloads\main.exe"
+$REQEXEC_BIN_DIR = "$BASE_DIR\reqExec"
+$REQEXEC_BIN_PATH = "$REQEXEC_BIN_DIR\$NODE_ARCHITECTURE\$NODE_OPERATING_SYSTEM\dist\main\main.exe"
 
 $REQKICK_DIR = "$BASE_DIR\reqKick"
 $CONTAINER_REQKICK_DIR = "$CONTAINER_BASE_DIR\reqKick"
@@ -32,9 +31,6 @@ $SCRIPTS_DIR = "$BUILD_DIR\scripts"
 
 # TODO: this needs to be hardcoded until we have a way to specify it in the API
 $EXEC_IMAGE = "drydock/w16reqproc:dev"
-
-# TODO: move these to reqproc image
-$IMAGE_REQEXEC_DIR = "$CONTAINER_BASE_DIR\reqExec"
 
 $REQPROC_MOUNTS = ""
 $REQPROC_ENVS = ""
@@ -206,7 +202,6 @@ Function setup_envs() {
     "-e SHIPPABLE_NODE_ARCHITECTURE=$NODE_ARCHITECTURE " + `
     "-e SHIPPABLE_NODE_OPERATING_SYSTEM=$NODE_OPERATING_SYSTEM " + `
     "-e SHIPPABLE_RELEASE_VERSION=$SHIPPABLE_RELEASE_VERSION " + `
-    "-e IMAGE_REQEXEC_DIR='$IMAGE_REQEXEC_DIR' " + `
     "-e DOCKER_HOST=${DOCKER_NAT_IP}:2375"
 }
 
@@ -243,10 +238,6 @@ Function boot_reqProc() {
   $restart_reqproc = "docker restart $REQPROC_CONTAINER_NAME"
   Write-Output "Restarting ReqProc Container"
   iex "$restart_reqproc"
-
-  $exec_templates = "docker exec $REQPROC_CONTAINER_NAME powershell git clone https://github.com/scriptnull/execTemplates.git"
-  Write-Output "Trying to setup execTemplates"
-  iex "$exec_templates"
 }
 
 Function boot_reqKick() {
