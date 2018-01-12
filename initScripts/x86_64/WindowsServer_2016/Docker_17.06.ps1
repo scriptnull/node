@@ -246,9 +246,9 @@ Function boot_reqProc() {
 Function boot_reqKick() {
   echo "Booting up reqKick service..."
 
-  git clone https://github.com/Shippable/reqKick.git $REQKICK_DIR
+  git clone https://github.com/scriptnull/reqKick.git $REQKICK_DIR
   pushd $REQKICK_DIR
-  git checkout $SHIPPABLE_RELEASE_VERSION
+  git checkout win-x
   npm install
 
   $reqkick_env_template = "$REQKICK_SERVICE_DIR/shippable-reqKick@.yml.template"
