@@ -220,7 +220,7 @@ Function setup_opts() {
 
 Function boot_reqProc() {
   Write-Output "Boot reqProc..."
-  docker pull $EXEC_IMAGE
+  # docker pull $EXEC_IMAGE
 
   $start_cmd = "docker run $global:REQPROC_OPTS $global:REQPROC_MOUNTS $global:REQPROC_ENVS $EXEC_IMAGE"
   Write-Output "Executing docker run command: " $start_cmd
