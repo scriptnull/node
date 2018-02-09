@@ -280,15 +280,12 @@ Function boot_reqKick() {
   $stderr_file = "$REQKICK_DIR\err.txt"
 
   nssm install reqkick "C:\Program Files\nodejs\node.exe" "$REQKICK_DIR\reqKick.app.js"
-  nssm set reqkick AppEnvironmentExtra STATUS_DIR="$STATUS_DIR"
-  nssm set reqkick AppEnvironmentExtra SCRIPTS_DIR="$SCRIPTS_DIR"
-  nssm set reqkick AppEnvironmentExtra RUN_MODE="$RUN_MODE"
-  nssm set reqkick AppEnvironmentExtra REQEXEC_BIN_PATH="$REQEXEC_BIN_PATH"
+  nssm set reqkick AppEnvironmentExtra STATUS_DIR="$STATUS_DIR" SCRIPTS_DIR="$SCRIPTS_DIR" RUN_MODE="$RUN_MODE" REQEXEC_BIN_PATH="$REQEXEC_BIN_PATH"
   echo "" | Out-File -Encoding utf8 $stdout_file
   echo "" | Out-File -Encoding utf8 $stderr_file
   nssm set reqkick AppStdout $stdout_file
   nssm set reqkick AppStderr $stderr_file
-  nssm start reqkick
+  #nssm start reqkick
 
   popd
 }
