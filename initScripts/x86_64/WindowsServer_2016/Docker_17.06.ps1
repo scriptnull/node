@@ -284,8 +284,8 @@ Function boot_reqKick() {
   nssm set reqkick AppEnvironmentExtra SCRIPTS_DIR=$SCRIPTS_DIR
   nssm set reqkick AppEnvironmentExtra RUN_MODE=$RUN_MODE
   nssm set reqkick AppEnvironmentExtra REQEXEC_BIN_PATH=$REQEXEC_BIN_PATH
-  echo $null >> $stdout_file
-  echo $null >> $stderr_file
+  echo "" | Out-File -Encoding utf8 $stdout_file
+  echo "" | Out-File -Encoding utf8 $stderr_file
   nssm set reqkick AppStdout $stdout_file
   nssm set reqkick AppStderr $stderr_file
   nssm start reqkick
