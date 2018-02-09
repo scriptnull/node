@@ -277,9 +277,10 @@ Function boot_reqKick() {
   #pm2 save
 
   $stdout_file = "$REQKICK_DIR\out.txt"
-  $stderr_file = "$REQKICK_DIR\ err.txt"
+  $stderr_file = "$REQKICK_DIR\err.txt"
 
-  nssm install reqkick node reqKick.app.js
+  nssm install reqkick "C:\Program Files\nodejs\node.exe" reqKick.app.js
+  nssm set reqkick AppDirectory $REQKICK_DIR
   nssm set reqkick AppEnvironmentExtra STATUS_DIR=$STATUS_DIR
   nssm set reqkick AppEnvironmentExtra SCRIPTS_DIR=$SCRIPTS_DIR
   nssm set reqkick AppEnvironmentExtra RUN_MODE=$RUN_MODE
