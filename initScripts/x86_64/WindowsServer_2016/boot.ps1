@@ -26,7 +26,12 @@ $REQUIRED_ENVS = @(
 
 $SHIPPABLE_RUNTIME_DIR = "$env:USERPROFILE\Shippable\Runtime"
 $BASE_UUID = New-Guid
-$BASE_DIR = "$SHIPPABLE_RUNTIME_DIR\$BASE_UUID"
+if ($NODE_TYPE_CODE -ne 7001) {
+  $BASE_DIR = "$SHIPPABLE_RUNTIME_DIR"
+}
+else {
+  $BASE_DIR = "$SHIPPABLE_RUNTIME_DIR\$BASE_UUID"
+}
 $CONTAINER_RUNTIME_DIR = "$env:USERPROFILE\Shippable\Runtime"
 $CONTAINER_BASE_DIR = "$CONTAINER_RUNTIME_DIR\$BASE_UUID"
 
@@ -219,7 +224,9 @@ check_required_envs($REQUIRED_ENVS)
 remove_reqKick
 remove_reqProc
 setup_dirs
-initialize
+if ($NODE_TYPE_CODE -ne 7001) {
+  initialize
+}
 setup_mounts
 setup_envs
 setup_opts
