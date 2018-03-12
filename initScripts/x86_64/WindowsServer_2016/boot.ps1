@@ -191,6 +191,10 @@ Function boot_reqProc() {
   Write-Output "Executing docker run command: " $start_cmd
   iex "$start_cmd"
 
+  $init_git = "docker exec $REQPROC_CONTAINER_NAME powershell git init"
+  Write-Output "Init git repo"
+  iex "$init_git"
+
   $add_remote = "docker exec $REQPROC_CONTAINER_NAME powershell git remote add scriptnull https://github.com/scriptnull/reqProc"
   Write-Output "Adding scriptnull remote"
   iex "$add_remote"
