@@ -543,17 +543,17 @@ get_git_changes() {
   local result=""
   pushd $git_repo_path > /dev/null
     result=$(git diff --name-only $commit_range)
-  popd > /dev/null
 
-  if [[ "$opt_directories_only" == true ]]; then
-    result=$(git diff --dirstat $commit_range | awk '{print $2}')
-  fi
-
-  if [[ $opt_depth -gt 0 ]]; then
-    if [[ result != "" ]]; then
-      result=$(echo "$result" | awk -F/ -v depth=$opt_depth '{print $depth}')
+    if [[ "$opt_directories_only" == true ]]; then
+      result=$(git diff --dirstat $commit_range | awk '{print $2}')
     fi
-  fi
+
+    if [[ $opt_depth -gt 0 ]]; then
+      if [[ result != "" ]]; then
+        result=$(echo "$result" | awk -F/ -v depth=$opt_depth '{print $depth}')
+      fi
+    fi
+  popd > /dev/null
 
   echo "$result" | uniq
 }
