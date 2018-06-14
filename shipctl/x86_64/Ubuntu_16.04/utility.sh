@@ -482,8 +482,8 @@ get_git_changes() {
   fi
 
   # declare options
-  local opt_git_repo_path=""
-  local opt_resource_name=""
+  local opt_path=""
+  local opt_resource=""
   local opt_depth=0
   local opt_directories_only=false
   local opt_commit_range=""
@@ -492,11 +492,11 @@ get_git_changes() {
   do
     case $arg in
       --path=*)
-      opt_git_repo_path="${arg#*=}"
+      opt_path="${arg#*=}"
       shift
       ;;
       --resource=*)
-      opt_resource_name="${arg#*=}"
+      opt_resource="${arg#*=}"
       shift
       ;;
       --depth=*)
@@ -515,15 +515,15 @@ get_git_changes() {
   done
 
   # obtain the path of git repository
-  if [[ "$opt_git_repo_path" == "" ]] && [[ "$opt_resource_name" == "" ]]; then
+  if [[ "$opt_path" == "" ]] && [[ "$opt_resource" == "" ]]; then
     echo "Usage: shipctl get_git_changes [--path|--resource]"
     exit 99
   fi
 
   # set file path of git repository
-  local git_repo_path="$opt_git_repo_path"
+  local git_repo_path="$opt_path"
   if [[ "$git_repo_path" == "" ]]; then
-    git_repo_path=$(get_resource_state "$opt_resource_name")
+    git_repo_path=$(get_resource_state "$opt_resource")
   fi
 
   if [[ ! -d "$git_repo_path/.git" ]]; then
@@ -536,17 +536,17 @@ get_git_changes() {
   local commit_range="$SHIPPABLE_COMMIT_RANGE"
 
   # for runSh with IN: gitRepo
-  if [[ "$opt_resource_name" != "" ]]; then
+  if [[ "$opt_resource" != "" ]]; then
     # for runSh with IN: gitRepo commits
-    local current_commit_sha=$(shipctl get_resource_version_key $opt_resource_name shaData.commitSha)
-    local before_commit_sha=$(shipctl get_resource_version_key $opt_resource_name shaData.beforeCommitSha)
+    local current_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.commitSha)
+    local before_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.beforeCommitSha)
     commit_range="$before_commit_sha..$current_commit_sha"
 
     # for runSh with IN: gitRepo pull request from one branch to another branch in same fork
-    local is_pull_request=$(shipctl get_resource_env $opt_resource_name is_pull_request)
+    local is_pull_request=$(shipctl get_resource_env $opt_resource is_pull_request)
     if [[ "$is_pull_request" == true ]]; then
-      local base_branch=$(shipctl get_resource_env $opt_resource_name base_branch)
-      local head_branch=$(shipctl get_resource_env $opt_resource_name head_branch)
+      local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
+      local head_branch=$(shipctl get_resource_env $opt_resource head_branch)
       commit_range="$base_branch $head_branch"
     fi
   fi
@@ -557,6 +557,8 @@ get_git_changes() {
   if [[ $opt_commit_range != "" ]]; then
     commit_range="$opt_commit_range"
   fi
+
+  echo "mylog -> commit_range $commit_range"
 
   local result=""
   pushd $git_repo_path > /dev/null
