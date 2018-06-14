@@ -542,12 +542,11 @@ get_git_changes() {
     local before_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.beforeCommitSha)
     commit_range="$before_commit_sha..$current_commit_sha"
 
-    # for runSh with IN: gitRepo pull request from one branch to another branch in same fork
+    # for runSh with IN: gitRepo pull requests
     local is_pull_request=$(shipctl get_resource_env $opt_resource is_pull_request)
     if [[ "$is_pull_request" == true ]]; then
       local current_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.commitSha)
       local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
-      # local head_branch=$(shipctl get_resource_env $opt_resource head_branch)
       commit_range="origin/$base_branch...$current_commit_sha"
     fi
   fi
@@ -558,8 +557,6 @@ get_git_changes() {
   if [[ $opt_commit_range != "" ]]; then
     commit_range="$opt_commit_range"
   fi
-
-  echo "mylog -> commit_range $commit_range"
 
   local result=""
   pushd $git_repo_path > /dev/null
