@@ -545,9 +545,10 @@ get_git_changes() {
     # for runSh with IN: gitRepo pull request from one branch to another branch in same fork
     local is_pull_request=$(shipctl get_resource_env $opt_resource is_pull_request)
     if [[ "$is_pull_request" == true ]]; then
-      local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
-      local head_branch=$(shipctl get_resource_env $opt_resource head_branch)
-      commit_range="$base_branch $head_branch"
+      local current_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.commitSha)
+      # local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
+      # local head_branch=$(shipctl get_resource_env $opt_resource head_branch)
+      commit_range="HEAD..$current_commit_sha"
     fi
   fi
 
