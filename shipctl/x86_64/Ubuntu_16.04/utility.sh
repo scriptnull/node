@@ -526,18 +526,36 @@ get_git_changes() {
     git_repo_path=$(get_resource_state "$opt_resource_name")
   fi
 
+  if [[ ! -d "$git_repo_path/.git" ]]; then
+    echo "git repository not found at path: $git_repo_path"
+    exit 99
+  fi
+
   # set default commit range
+  # for CI
   local commit_range="$SHIPPABLE_COMMIT_RANGE"
+
+  # for runSh with IN: gitRepo
+  if [[ "$opt_resource_name" != "" ]]; then
+    # for runSh with IN: gitRepo commits
+    local current_commit_sha=$(shipctl get_resource_version_key $opt_resource_name shaData.commitSha)
+    local before_commit_sha=$(shipctl get_resource_version_key $opt_resource_name shaData.beforeCommitSha)
+    commit_range="$before_commit_sha..$current_commit_sha"
+
+    # for runSh with IN: gitRepo pull request from one branch to another branch in same fork
+    local is_pull_request=$(shipctl get_resource_env $opt_resource_name is_pull_request)
+    if [[ "$is_pull_request" == true ]]; then
+      local base_branch=$(shipctl get_resource_env $opt_resource_name base_branch)
+      local head_branch=$(shipctl get_resource_env $opt_resource_name head_branch)
+      commit_range="$base_branch $head_branch"
+    fi
+  fi
+
   if [[ $commit_range == "" ]]; then
     commit_range="HEAD~1..HEAD"
   fi
   if [[ $opt_commit_range != "" ]]; then
     commit_range="$opt_commit_range"
-  fi
-
-  if [[ ! -d "$git_repo_path/.git" ]]; then
-    echo "git repository not found at path: $git_repo_path"
-    exit 99
   fi
 
   local result=""
