@@ -546,9 +546,9 @@ get_git_changes() {
     local is_pull_request=$(shipctl get_resource_env $opt_resource is_pull_request)
     if [[ "$is_pull_request" == true ]]; then
       local current_commit_sha=$(shipctl get_resource_version_key $opt_resource shaData.commitSha)
-      # local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
+      local base_branch=$(shipctl get_resource_env $opt_resource base_branch)
       # local head_branch=$(shipctl get_resource_env $opt_resource head_branch)
-      commit_range="HEAD..$current_commit_sha"
+      commit_range="origin/$base_branch...$current_commit_sha"
     fi
   fi
 
