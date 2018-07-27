@@ -194,6 +194,26 @@ Function boot_reqProc() {
   $start_cmd = "docker run $global:REQPROC_OPTS $global:REQPROC_MOUNTS $global:REQPROC_ENVS $EXEC_IMAGE"
   Write-Output "Executing docker run command: " $start_cmd
   iex "$start_cmd"
+
+  $init_git = "docker exec $REQPROC_CONTAINER_NAME powershell git init"
+  Write-Output "Init git repo"
+  iex "$init_git"
+
+  $add_remote = "docker exec $REQPROC_CONTAINER_NAME powershell git remote add scriptnull https://github.com/scriptnull/reqProc"
+  Write-Output "Adding scriptnull remote"
+  iex "$add_remote"
+
+  $fetch_windows = "docker exec $REQPROC_CONTAINER_NAME powershell git fetch scriptnull windows"
+  Write-Output "Fetching windows branch"
+  iex "$fetch_windows"
+
+  $reset_windows = "docker exec $REQPROC_CONTAINER_NAME powershell git reset scriptnull/windows --hard"
+  Write-Output "Resetting windows branch"
+  iex "$reset_windows"
+
+  $restart_reqproc = "docker restart $REQPROC_CONTAINER_NAME"
+  Write-Output "Restarting ReqProc Container"
+  iex "$restart_reqproc"
 }
 
 Function boot_reqKick() {
