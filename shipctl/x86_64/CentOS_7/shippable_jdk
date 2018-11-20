@@ -94,11 +94,20 @@ shippable_jdk() {
       export_java_path "/usr/java/jre1.8.0_172-amd64";
       set_java_path "/usr/java/jre1.8.0_172-amd64/bin/java";
       set_javac_path "/usr/java/jdk1.8.0_172-amd64/bin/javac";
-    else
+    elif [ -d "/usr/java/jdk1.8.0_171-amd64" ]; then
       echo "inside else block /usr/java/jdk1.8.0_171-amd64";
       export_java_path "/usr/java/jdk1.8.0_171-amd64";
       set_java_path "/usr/java/jdk1.8.0_171-amd64/bin/java";
       set_javac_path "/usr/java/jdk1.8.0_171-amd64/bin/javac";
+    elif [ -d "/usr/java/jdk1.8.0_161" ]; then
+      # copied from v6.2.4 version of the script and java path is fixed to point to jdk instead of jre
+      echo "inside else block /usr/java/jre1.8.0_161";
+      export_java_path "/usr/java/jdk1.8.0_161";
+      set_java_path "/usr/java/jdk1.8.0_161/bin/java";
+      set_javac_path "/usr/java/jdk1.8.0_161/bin/javac";
+    else
+      echo "Java version not supported"
+      exit 99
     fi
   elif [ "$JDK_VERSION" == "oraclejdk9" ]; then
     export_java_path "/usr/java/jdk-9.0.4";
