@@ -37,7 +37,7 @@ shippable_jdk() {
   if [ "$JDK_VERSION" == "openjdk7" ]; then
     if [ -d "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.191-2.6.15.4.el7_5.x86_64" ]; then
       export_java_path "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.191-2.6.15.4.el7_5.x86_64";
-      set_java_path "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.191-2.6.15.4.el7_5.x86_64/jre/bin/java";
+      set_java_path "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.191-2.6.15.4.el7_5.x86_64/bin/java";
       set_javac_path "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.191-2.6.15.4.el7_5.x86_64/bin/javac";
     elif [ -d "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.8.el7_5.x86_64" ]; then
       export_java_path "/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.181-2.6.14.8.el7_5.x86_64";
@@ -96,9 +96,9 @@ shippable_jdk() {
       set_java_path "/usr/java/jre1.8.0_172-amd64/bin/java";
       set_javac_path "/usr/java/jdk1.8.0_172-amd64/bin/javac";
     else
-      echo "INSIDE /usr/java/jre1.8.0_171-amd64";
-      export_java_path "/usr/java/jre1.8.0_171-amd64";
-      set_java_path "/usr/java/jre1.8.0_171-amd64/bin/java";
+      echo "INSIDE /usr/java/jdk1.8.0_171-amd64";
+      export_java_path "/usr/java/jdk1.8.0_171-amd64";
+      set_java_path "/usr/java/jdk1.8.0_171-amd64/bin/java";
       set_javac_path "/usr/java/jdk1.8.0_171-amd64/bin/javac";
     fi
   elif [ "$JDK_VERSION" == "oraclejdk9" ]; then
