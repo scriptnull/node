@@ -85,10 +85,10 @@ shippable_jdk() {
       export_java_path "/usr/lib/jvm/java-8-oraclejdk-amd64";
       set_java_path "/usr/lib/jvm/java-8-oraclejdk-amd64/bin/java";
       set_javac_path "/usr/lib/jvm/java-8-oraclejdk-amd64/bin/javac";
-    elif [ -d "/usr/java/jre1.8.0_181-amd64" ]; then
-      echo "INSIDE /usr/java/jre1.8.0_181-amd64";
-      export_java_path "/usr/java/jre1.8.0_181-amd64";
-      set_java_path "/usr/java/jre1.8.0_181-amd64/bin/java";
+    elif [ -d "/usr/java/jdk1.8.0_181-amd64" ]; then
+      echo "INSIDE /usr/java/jdk1.8.0_181-amd64";
+      export_java_path "/usr/java/jdk1.8.0_181-amd64";
+      set_java_path "/usr/java/jdk1.8.0_181-amd64/bin/java";
       set_javac_path "/usr/java/jdk1.8.0_181-amd64/bin/javac";
     elif [ -d "/usr/java/jre1.8.0_172-amd64" ]; then
       echo "INSIDE /usr/java/jre1.8.0_172-amd64";
