@@ -978,8 +978,46 @@ notify() {
         opt_password="${arg#*=}"
         shift
         ;;
+      --type=*)
+        opt_type="${arg#*=}"
+        shift
+        ;;
+      --project-id=*)
+        opt_project_id="${arg#*=}"
+        shift
+        ;;
+      --environment=*)
+        opt_environment="${arg#*=}"
+        shift
+        ;;
+      --email=*)
+        opt_email="${arg#*=}"
+        shift
+        ;;
+      --repository=*)
+        opt_repository="${arg#*=}"
+        shift
+        ;;
+      --revision=*)
+        opt_revision="${arg#*=}"
+        shift
+        ;;
+      --version=*)
+        opt_version="${arg#*=}"
+        shift
+        ;;
     esac
   done
+
+  echo "mylog"
+  echo "opt_type = $opt_type"
+  echo "opt_project_id = $opt_project_id"
+  echo "opt_environment = $opt_environment"
+  echo "opt_username = $opt_username"
+  echo "opt_email = $opt_email"
+  echo "opt_repository = $opt_repository"
+  echo "opt_revision = $opt_revision"
+  echo "opt_version = $opt_version"
 
   local recipients_list=()
 
