@@ -1225,6 +1225,8 @@ _send_curl() {
 
   echo "mylog _send_curl"
   echo "payload = $payload"
+  echo "cat payload"
+  cat $payload
   echo "auth = $auth"
   echo "endpoint = $endpoint"
 
