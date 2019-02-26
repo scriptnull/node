@@ -918,6 +918,16 @@ notify() {
   fi
 
   export opt_text="$NOTIFY_TEXT"
+
+  # airBrakeKey options
+  export opt_type=""
+  export opt_project_id=""
+  export opt_environment=""
+  export opt_email=""
+  export opt_repository=""
+  export opt_revision=""
+  export opt_version=""
+
   if [ -z "$opt_text" ]; then
     # set up default text
     opt_text=""
@@ -1128,11 +1138,19 @@ notify() {
           echo "Error: missing --type argument"
           exit 99
         fi
+        local obj_type=""
+        if [ "$opt_type" == "deploy" ]; then
+          obj_type="deploys"
+        fi
+        if [ -z "$obj_type" ]; then
+          echo "Error: unsupported type"
+          exit 99
+        fi
         local r_token=$(get_integration_resource_field "$r_name" token)
         default_payload="$default_airbrake_payload"
         r_endpoint=$(get_integration_resource_field "$r_name" url)
         r_endpoint="${r_endpoint%/}"
-        r_endpoint="${r_endpoint}/projects/${opt_project_id}/deploys?key=${r_token}"
+        r_endpoint="${r_endpoint}/projects/${opt_project_id}/${obj_type}?key=${r_token}"
         ;;
       *)
         echo "Error: unsupported notification type: $r_mastername"
