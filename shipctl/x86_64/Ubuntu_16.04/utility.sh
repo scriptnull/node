@@ -1144,6 +1144,7 @@ notify() {
 
         local r_project_id="${opt_project_id}"
         if [ -z "$r_project_id" ]; then
+          recipients_list=($(jq -r ".version.propertyBag.recipients[]" $meta/version.json))
           r_project_id=${recipients_list[0]}
         fi
         if [ -z "$r_project_id" ]; then
