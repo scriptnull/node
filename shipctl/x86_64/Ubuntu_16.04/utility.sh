@@ -1124,12 +1124,11 @@ notify() {
         r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
         ;;
       "airBrakeKey" )
-        local r_authorization=$(get_integration_resource_field "$r_name" token)
-        if [ -n "$r_authorization" ]; then
-          curl_auth="-H authorization:'$r_authorization'"
-        fi
+        local r_token=$(get_integration_resource_field "$r_name" token)
         default_payload="$default_airbrake_payload"
         r_endpoint=$(get_integration_resource_field "$r_name" url)
+        r_endpoint="${r_endpoint%/}"
+        r_endpoint="${r_endpoint}/projects/${opt_project_id}/deploys?key=${r_token}"
         ;;
       *)
         echo "Error: unsupported notification type: $r_mastername"
