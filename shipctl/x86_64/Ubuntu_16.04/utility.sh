@@ -1134,23 +1134,28 @@ notify() {
         r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
         ;;
       "airBrakeKey" )
-        if [ -z "$opt_type" ]; then
-          echo "Error: missing --type argument"
-          exit 99
-        fi
-        local obj_type=""
+        local r_obj_type=""
         if [ "$opt_type" == "deploy" ]; then
-          obj_type="deploys"
-        fi
-        if [ -z "$obj_type" ]; then
-          echo "Error: unsupported type"
+          r_obj_type="deploys"
+        elif [ -z "$opt_type" ]; then
+          echo "Error: unsupported --type argument"
           exit 99
         fi
+
+        local r_project_id="${opt_project_id}"
+        if [ -z "$r_project_id" ]; then
+          r_project_id=${recipients_list[0]}
+        fi
+        if [ -z "$r_project_id" ]; then
+          echo "Error: missing project ID, try passing --project-id"
+          exit 99
+        fi
+
         local r_token=$(get_integration_resource_field "$r_name" token)
         default_payload="$default_airbrake_payload"
         r_endpoint=$(get_integration_resource_field "$r_name" url)
         r_endpoint="${r_endpoint%/}"
-        r_endpoint="${r_endpoint}/projects/${opt_project_id}/${obj_type}?key=${r_token}"
+        r_endpoint="${r_endpoint}/projects/${r_project_id}/${r_obj_type}?key=${r_token}"
         ;;
       *)
         echo "Error: unsupported notification type: $r_mastername"
