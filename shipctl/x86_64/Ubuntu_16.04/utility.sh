@@ -1102,7 +1102,9 @@ notify() {
     # set up the default payloads once options have been parsed
     local default_slack_payload="{\"username\":\"\${opt_username}\",\"attachments\":[{\"pretext\":\"\${opt_pretext}\",\"text\":\"\${opt_text}\",\"color\":\"\${opt_color}\"}],\"channel\":\"\${opt_recipient}\",\"icon_url\":\"\${opt_icon_url}\"}"
     local default_webhook_payload="{\"username\":\"\${opt_username}\",\"pretext\":\"\${opt_pretext}\",\"text\":\"\${opt_text}\",\"color\":\"\${opt_color}\",\"recipient\":\"\${opt_recipient}\",\"icon_url\":\"\${opt_icon_url}\"}"
+    local default_airbrake_payload="{\"environment\":\"\${opt_environment}\",\"username\":\"\${opt_username}\",\"email\":\"\${opt_email}\",\"repository\":\"\${opt_repository}\",\"revision\":\"\${opt_revision}\",\"version\":\"\${opt_version}\"}"
     local default_payload=""
+    local r_endpoint=""
 
     # set up type-unique options
     case "$r_mastername" in
@@ -1111,6 +1113,7 @@ notify() {
         if [ -z "$opt_recipient" ]; then
           recipients_list=($(jq -r ".version.propertyBag.recipients[]" $meta/version.json))
         fi
+        r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
         ;;
       "webhook"|"webhookV2" )
         local r_authorization=$(get_integration_resource_field "$r_name" authorization)
@@ -1118,6 +1121,15 @@ notify() {
           curl_auth="-H authorization:'$r_authorization'"
         fi
         default_payload="$default_webhook_payload"
+        r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
+        ;;
+      "airBrakeKey" )
+        local r_authorization=$(get_integration_resource_field "$r_name" token)
+        if [ -n "$r_authorization" ]; then
+          curl_auth="-H authorization:'$r_authorization'"
+        fi
+        default_payload="$default_airbrake_payload"
+        r_endpoint=$(get_integration_resource_field "$r_name" url)
         ;;
       *)
         echo "Error: unsupported notification type: $r_mastername"
@@ -1125,11 +1137,14 @@ notify() {
         ;;
     esac
 
-    local r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
     if [ -z "$r_endpoint" ]; then
       echo "Error: no endpoint found in resource $r_name"
       exit 99
     fi
+
+    echo "mylog default_payload = $default_payload"
+    echo "mylog curl_auth = $curl_auth"
+    echo "mylog r_endpoint = $r_endpoint"
 
     if [ -n "$opt_payload" ]; then
       if [ ! -f $opt_payload ]; then
