@@ -1223,6 +1223,11 @@ _send_curl() {
   local auth=$2
   local endpoint=$3
 
+  echo "mylog _send_curl"
+  echo "payload = $payload"
+  echo "auth = $auth"
+  echo "endpoint = $endpoint"
+
   local curl_cmd="curl -XPOST -sS -H content-type:'application/json' $auth $endpoint -d @$payload"
   eval $curl_cmd
   echo ""
