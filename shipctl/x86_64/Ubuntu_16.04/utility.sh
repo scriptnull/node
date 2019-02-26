@@ -1124,6 +1124,10 @@ notify() {
         r_endpoint=$(get_integration_resource_field "$r_name" webhookUrl)
         ;;
       "airBrakeKey" )
+        if [ -z "$opt_type" ]; then
+          echo "Error: missing --type argument"
+          exit 99
+        fi
         local r_token=$(get_integration_resource_field "$r_name" token)
         default_payload="$default_airbrake_payload"
         r_endpoint=$(get_integration_resource_field "$r_name" url)
@@ -1141,7 +1145,7 @@ notify() {
       exit 99
     fi
 
-    echo "mylog default_payload = $default_payload"
+    echo "mylog default_payload = $(echo $default_payload)"
     echo "mylog curl_auth = $curl_auth"
     echo "mylog r_endpoint = $r_endpoint"
 
@@ -1176,7 +1180,11 @@ notify() {
       else
         echo $default_payload > /tmp/payload.json
         opt_payload=/tmp/payload.json
+        echo "mylog before shipctl replace"
+        cat $opt_payload
         shipctl replace $opt_payload
+        echo "mylog after shipctl replace"
+        cat $opt_payload
 
         local isValid=$(jq type $opt_payload || true)
         if [ -z "$isValid" ]; then
