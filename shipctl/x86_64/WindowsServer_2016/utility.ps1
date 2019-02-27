@@ -1014,6 +1014,63 @@ function _send_irc_notification() {
   }
 }
 
+function _send_airbrake_notification() {
+  param(
+    [string]$type,
+    [string]$projectId,
+    [string]$environment,
+    [string]$username,
+    [string]$email,
+    [string]$repository,
+    [string]$revision,
+    [string]$version
+  )
+
+  $curl_auth = ""
+  $r_obj_type = ""
+  $r_project_id = "$env:opt_project_id"
+  $r_endpoint = $(get_integration_resource_field "$env:opt_resource" url)
+  $r_token = $(get_integration_resource_field "$env:opt_resource" token)
+  $default_airbrake_payload = '{"environment":"$environment","username":"$username","email":"$email","repository":"$repository","revision":"$revision","version":"$version"}'
+
+  if (!$type) {
+    throw "Error: --type is missing in shipctl notify"
+  }
+  if ($type -eq "deploy") {
+    $r_obj_type = "deploys"
+  } else {
+    throw "Error: unsupported type value $type"
+  }
+
+  if (!$r_project_id) {
+    $recipients_list = $(get_resource_version_key "$env:opt_resource" "recipients")
+    $r_project_id = $recipients_list[0]
+  }
+  if (!$r_project_id) {
+    throw "Error: missing project ID, try passing --project-id"
+  }
+
+  $r_endpoint = $r_endpoint.trim('/')
+  $r_endpoint = "$r_endpoint/projects/$r_project_id/$r_obj_type?key=$r_token"
+
+  if ($env:opt_payload) {
+    if (!(Test-Path $env:opt_payload)) {
+      throw "Error: file not found at path: $env:opt_payload"
+    }
+    try {
+      $result = Get-Content $env:opt_payload -Raw | ConvertFrom-Json -ErrorAction Stop
+    } catch {
+      throw "Error: payload is not valid JSON"
+    }
+  } else {
+    Out-File -FilePath "$env:TEMP/payload.json" -InputObject $default_airbrake_payload
+    $env:opt_payload = "$env:TEMP/payload.json"
+    shipctl replace $env:opt_payload
+  }
+
+  _send_web_notification -payload "$env:opt_payload" -auth "$r_authorization" -endpoint "$r_endpoint"
+}
+
 function _check_message() {
 
   param(
